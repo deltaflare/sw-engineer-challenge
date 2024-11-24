@@ -19,7 +19,7 @@ func CreateEvent() models.Event {
 
 	return models.Event{
 		Criticality:  r.Intn(5) + 1,
-		Timestamp:    time.Now().Format(time.RFC3339),
+		Timestamp:    time.Now(),
 		EventMessage: "New event created",
 	}
 }
@@ -36,13 +36,14 @@ func SaveEventToDB(client influxdb.Client, event models.Event) error {
 
 	p := influxdb.NewPoint(
 		"security_event",
-		map[string]string{"source": "daemon"},
-		map[string]interface{}{
-			"criticality":  event.Criticality,
+		map[string]string{
+			"source":       "daemon",
 			"eventMessage": event.EventMessage,
-			"timestamp":    event.Timestamp,
 		},
-		time.Now(),
+		map[string]interface{}{
+			"criticality": event.Criticality,
+		},
+		event.Timestamp,
 	)
 
 	if err := writeAPI.WritePoint(context.Background(), p); err != nil {

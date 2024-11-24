@@ -46,19 +46,23 @@ services:
     networks:
       - app_network
 
-  # client:
-  #   build:
-  #     context: ./client
-  #     dockerfile: Dockerfile.dev
-  #   container_name: client
-  #   depends_on:
-  #     - rabbitmq
-  #   volumes:
-  #     - ./client:/app
-  #   environment:
-  #     RABBITMQ_URL: ${RABBITMQ_URL}
-  #   networks:
-  #     - app_network
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    container_name: client
+    depends_on:
+      - influxdb
+      # - rabbitmq
+    volumes:
+      - ./client:/app
+    environment:
+      - INFLUXDB_URL=${INFLUXDB_URL}
+      - INFLUXDB_ORG=${DOCKER_INFLUXDB_INIT_ORG}
+      - INFLUXDB_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET}
+      - INFLUX_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
+    networks:
+      - app_network
 
 volumes:
   influxdb_data:

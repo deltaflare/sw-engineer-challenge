@@ -42,7 +42,6 @@ services:
     depends_on:
       - influxdb
       # rabbitmq:
-      #   condition: service_healthy
     environment:
       - INFLUXDB_URL=${INFLUXDB_URL}
       - INFLUXDB_ORG=${DOCKER_INFLUXDB_INIT_ORG}
@@ -51,14 +50,20 @@ services:
     networks:
       - app_network
 
-  # client:
-  #   build:
-  #     context: ./client
-  #   container_name: client
-  #   depends_on:
-  #     - rabbitmq
-  #   networks:
-  #     - app_network
+  client:
+    build:
+      context: ./client
+    container_name: client
+    depends_on:
+      - influxdb
+      # - rabbitmq
+    environment:
+      - INFLUXDB_URL=${INFLUXDB_URL}
+      - INFLUXDB_ORG=${DOCKER_INFLUXDB_INIT_ORG}
+      - INFLUXDB_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET}
+      - INFLUX_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
+    networks:
+      - app_network
 
 volumes:
   influxdb_data:
