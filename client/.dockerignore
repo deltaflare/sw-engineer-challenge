@@ -1,0 +1,19 @@
+# Ignore Go binary and temporary files
+tmp/
+*.log
+*.out
+
+# Ignore version control system directories
+.git
+.gitignore
+
+# Ignore dependencies directory (if using vendor)
+vendor/
+
+# Ignore IDE-specific files
+.idea/
+.vscode/
+
+# Ignore operating system-specific files
+.DS_Store
+Thumbs.db

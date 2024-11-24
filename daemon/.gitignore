@@ -1,0 +1,20 @@
+# Binaries and temporary files
+*.exe
+*.out
+*.log
+*.tmp
+tmp/
+*.swp
+
+# Vendor directory (if dependencies are included in the repository)
+vendor/
+
+# IDE-specific files
+.idea/
+.vscode/
+*.iml
+
+# Operating system-specific files
+.DS_Store
+Thumbs.db
+

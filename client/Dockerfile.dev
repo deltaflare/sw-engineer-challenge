@@ -1,0 +1,17 @@
+FROM golang:1.20
+
+# Install Air for live reload
+RUN apt-get update && apt-get install -y curl && \
+    curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s && \
+    mv ./bin/air /usr/local/bin/air
+
+WORKDIR /app
+
+# Copy project files
+COPY . .
+
+# Install dependencies
+RUN go mod tidy
+
+# Command for live reload during development
+CMD ["air"]
