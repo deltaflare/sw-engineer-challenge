@@ -1,23 +1,6 @@
 version: "3.8"
 
 services:
-  # rabbitmq:
-  #   image: rabbitmq:3-management
-  #   container_name: rabbitmq
-  #   ports:
-  #     - "5672:5672"
-  #     - "15672:15672"
-  #   environment:
-  #     - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
-  #     - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
-  #   healthcheck:
-  #     test: ["CMD", "rabbitmqctl", "ping"]
-  #     interval: 5s
-  #     timeout: 10s
-  #     retries: 5
-  #   networks:
-  #     - app_network
-
   influxdb:
     image: influxdb:2.6
     container_name: influxdb
@@ -41,7 +24,6 @@ services:
     container_name: daemon
     depends_on:
       - influxdb
-      # rabbitmq:
     environment:
       - INFLUXDB_URL=${INFLUXDB_URL}
       - INFLUXDB_ORG=${DOCKER_INFLUXDB_INIT_ORG}
@@ -56,7 +38,6 @@ services:
     container_name: client
     depends_on:
       - influxdb
-      # - rabbitmq
     environment:
       - INFLUXDB_URL=${INFLUXDB_URL}
       - INFLUXDB_ORG=${DOCKER_INFLUXDB_INIT_ORG}

@@ -1,16 +1,6 @@
 version: "3.8"
 
 services:
-  # rabbitmq:
-  #   image: rabbitmq:3-management
-  #   container_name: rabbitmq
-  #   ports:
-  #     - "5672:5672"
-  #     - "15672:15672"
-  #   environment:
-  #     RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
-  #     RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
-
   influxdb:
     image: influxdb:2.6
     container_name: influxdb
@@ -35,7 +25,6 @@ services:
     container_name: daemon
     depends_on:
       - influxdb
-      # - rabbitmq
     volumes:
       - ./daemon:/app
     environment:
@@ -53,7 +42,6 @@ services:
     container_name: client
     depends_on:
       - influxdb
-      # - rabbitmq
     volumes:
       - ./client:/app
     environment:
