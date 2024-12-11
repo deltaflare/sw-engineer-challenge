@@ -9,7 +9,10 @@ The task is designed to evaluate your ability to develop microservices using Gol
 You are required to create a complete microservices setup using Golang and Docker. This setup will include:
 - A **daemon service** to generate JSON-formatted security events.
 - A **client service** to query and display critical events.
-- Integration with **InfluxDB** for event storage.
+- A **writer service** to write to InfluxDB.
+- A **reader service** to read data from InfluxDB.
+- **NATS** server for messaging between microservices.
+- **InfluxDB** for event storage.
 
 ---
 
@@ -21,17 +24,30 @@ You are required to create a complete microservices setup using Golang and Docke
   - `criticality` (integer)
   - `timestamp` (ISO 8601 format string)
   - `eventMessage` (string)
-- Push these events to an **InfluxDB** time-series database.
+- Publish these events on NATS using the subject `events`.
 
 ### Client Service:
-- Create a Golang client that queries **InfluxDB** to retrieve the **last 10 events with the highest criticality**.
+- Create a Golang client that queries, using NATS messages, to retrieve the **last 10 events with the criticality level higher than `x`**, where `x` is set in an environmet variable.
 - Display these events in a clear and concise format of your choice.
+- Package this client into a **Docker container**.
+
+### Reader Service:
+- Create a Golang client that services NATS requests to query **InfluxDB** to retrieve the **last `x` events with the criticality higher than `y`**. where `x` and `y` are as specified in the request
+- respond via NATS with the requested events
+- Package this client into a **Docker container**.
+
+### Writer Service:
+- Create a Golang client that subscribe to events published on NATS and write them on **InfluxDB**
+- respond via NATS with the requested events
 - Package this client into a **Docker container**.
 
 ### Docker Network Setup:
 Define a **Docker Compose** file to manage a network comprising:
 - Your daemon service
 - Your client service
+- Your reader service
+- Your writer service
+- **NATS**
 - An **InfluxDB** container
 
 ---
